@@ -9,5 +9,5 @@
         "License": "MIT"
     },
     "X-Plasma-API": "declarativescript",
-    "X-Plasma-MainScript": "v4/main.qml"
+    "X-Plasma-MainScript": "v6/main.qml"
 }

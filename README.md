@@ -13,6 +13,11 @@ Animated terminals for KDE Plasma (Wayland). Terminal windows fall, bounce, slin
 | `slingshot` | Flies in from a random edge, overshoots, snaps back (a damped spring). |
 | `glitch` | Flickers in and out with random jumps that shrink until it locks in. |
 | `fade` | Fades in with a short upward slide. |
+| `slide` | Glides down from the top edge and eases to a stop, like a classic drop-down terminal. |
+| `shake` | Appears in place and rattles, settling as the shaking dies down. |
+| `pendulum` | Swings in on an arc from above the screen, like a wrecking ball, and settles. |
+| `orbit` | Spirals in from the edge of the screen, circling inward about one and a half times. |
+| `yoyo` | Drops on a spring from above, falls past its spot, and bobs back to rest. |
 | `random` | Picks from `randomPool`, never the same twice in a row. |
 
 Each trigger has its own animation: **new terminal windows** (any app in `terminalClasses`, so launching Ghostty from a dock plays it) and the **hotkey terminal** (F12). Either can use the monitor your cursor is on, so clicking a dock icon on a screen makes the window arrive on that screen, or a fixed monitor.
@@ -40,7 +45,7 @@ Open **Terminal Animations** from your app menu, or run `termanim-settings`. Cha
 
 <img src="media/settings.png" alt="termanim settings window" width="420">
 
-It covers the animation and monitor for the hotkey terminal and for new windows, the hotkey, which window classes animate, the pool for random, size and position, and the physics tuning for each animation.
+It covers the animation and monitor for the hotkey terminal and for new windows, the hotkey, which window classes animate, the pool for random, size and position, and the tuning for each animation.
 
 ## Command line
 

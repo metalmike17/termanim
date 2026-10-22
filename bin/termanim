@@ -11,9 +11,9 @@ def script_path():
     return os.path.join(PKG, "contents", main)
 
 KEYS = {
-    "newWindowAnimation": ("gravity", "animation for new terminal windows: gravity | paddle | fade | slingshot | glitch | random"),
-    "hotkeyAnimation":    ("gravity", "animation for the hotkey terminal: gravity | paddle | fade | slingshot | glitch | random"),
-    "randomPool":         ("gravity,paddle,fade,slingshot,glitch", "animations 'random' chooses from (comma separated)"),
+    "newWindowAnimation": ("gravity", "animation for new terminal windows: gravity | paddle | fade | slingshot | glitch | slide | shake | pendulum | orbit | yoyo | random"),
+    "hotkeyAnimation":    ("gravity", "animation for the hotkey terminal: gravity | paddle | fade | slingshot | glitch | slide | shake | pendulum | orbit | yoyo | random"),
+    "randomPool":         ("gravity,paddle,fade,slingshot,glitch,slide,shake,pendulum,orbit,yoyo", "animations 'random' chooses from (comma separated)"),
     "newWindowScreen":    ("cursor", "monitor for new windows: cursor, or an output name like DP-3"),
     "hotkeyScreen":       ("cursor", "monitor for the hotkey terminal: cursor, or an output name"),
     "terminalClasses":    ("com.mitchellh.ghostty,org.kde.konsole,kitty,Alacritty", "window classes that animate when they open"),
@@ -30,6 +30,11 @@ KEYS = {
     "slingshotStiffness": ("300", "slingshot: spring pull (higher = snappier)"),
     "slingshotDamping":   ("11", "slingshot: friction (lower = more overshoot)"),
     "glitchTime":         ("0.6", "glitch: seconds of flickering"),
+    "slideTime":          ("0.5", "slide: seconds to glide down"),
+    "shakeTime":          ("0.7", "shake: seconds of rattling"),
+    "shakeStrength":      ("40", "shake: starting amplitude in pixels"),
+    "pendulumSwing":      ("55", "pendulum: starting swing angle in degrees"),
+    "orbitTime":          ("1.8", "orbit: seconds spent spiraling in"),
     "fadeTime":           ("0.25", "fade: seconds to fade in"),
 }
 

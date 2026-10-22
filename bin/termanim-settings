@@ -14,8 +14,8 @@ _spec = importlib.util.spec_from_loader("termanim_cli", _loader)
 cli = importlib.util.module_from_spec(_spec)
 _loader.exec_module(cli)
 
-ANIMATIONS = ["gravity", "paddle", "slingshot", "glitch", "fade", "random"]
-POOL = ["gravity", "paddle", "slingshot", "glitch", "fade"]
+POOL = ["gravity", "paddle", "slingshot", "glitch", "fade", "slide", "shake", "pendulum", "orbit", "yoyo"]
+ANIMATIONS = POOL + ["random"]
 APPLY_DELAY_MS = 600   # wait for the user to stop adjusting before reloading the script
 
 
@@ -123,13 +123,15 @@ class Settings(Adw.ApplicationWindow):
         page.add(g)
 
     def random_group(self, page):
-        g = Adw.PreferencesGroup(title="Random", description="What the Random animation picks from")
+        g = Adw.PreferencesGroup(title="Random")
         current = [s.strip() for s in cli.current("randomPool").split(",") if s.strip()]
+        expander = Adw.ExpanderRow(title="Random picks from", subtitle="The animations the Random choice draws on")
+        g.add(expander)
         rows = []
         for name in POOL:
             row = Adw.SwitchRow(title=name.capitalize(), active=name in current)
             rows.append((name, row))
-            g.add(row)
+            expander.add_row(row)
 
         def changed(row, _p):
             chosen = [n for n, r in rows if r.get_active()]
@@ -192,6 +194,11 @@ class Settings(Adw.ApplicationWindow):
         self.spin(g, "Slingshot friction", "Lower overshoots more", "slingshotDamping", 2, 40, 1)
         self.spin(g, "Glitch time", "Seconds of flickering", "glitchTime", 0.2, 3, 0.1, 1)
         self.spin(g, "Fade time", "Seconds to fade in", "fadeTime", 0.05, 2, 0.05, 2)
+        self.spin(g, "Slide time", "Seconds to glide down", "slideTime", 0.1, 3, 0.05, 2)
+        self.spin(g, "Shake time", "Seconds of rattling", "shakeTime", 0.2, 3, 0.1, 1)
+        self.spin(g, "Shake strength", "Starting size of the shake, in pixels", "shakeStrength", 5, 150, 5)
+        self.spin(g, "Pendulum swing", "Starting angle in degrees", "pendulumSwing", 10, 80, 5)
+        self.spin(g, "Orbit time", "Seconds spent spiraling in", "orbitTime", 0.5, 5, 0.1, 1)
         self.spin(g, "Settle time", "Seconds easing into the resting spot", "settleTime", 0.1, 2, 0.05, 2)
         page.add(g)
 

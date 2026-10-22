@@ -13,10 +13,10 @@ Item {
     readonly property string hotkeyClass: cfg("hotkeyClass", "dev.termanim.dropdown")
     readonly property string hotkey: cfg("hotkey", "F12")
 
-    // animation per trigger: gravity | paddle | fade | slingshot | glitch | random
+    // animation per trigger: gravity | paddle | fade | slingshot | glitch | slide | shake | pendulum | orbit | yoyo | random
     readonly property string newWindowAnimation: cfg("newWindowAnimation", "gravity")
     readonly property string hotkeyAnimation: cfg("hotkeyAnimation", "gravity")
-    readonly property var randomPool: String(cfg("randomPool", "gravity,paddle,fade,slingshot,glitch")).split(",").map(s => s.trim()).filter(s => s.length > 0)
+    readonly property var randomPool: String(cfg("randomPool", "gravity,paddle,fade,slingshot,glitch,slide,shake,pendulum,orbit,yoyo")).split(",").map(s => s.trim()).filter(s => s.length > 0)
 
     // monitor per trigger: "cursor" (screen the mouse is on) or an output name such as DP-3
     readonly property string newWindowScreen: cfg("newWindowScreen", "cursor")
@@ -38,6 +38,11 @@ Item {
     readonly property real stiffness: num("slingshotStiffness", 300)   // slingshot: spring pull (higher = snappier)
     readonly property real damping: num("slingshotDamping", 11)        // slingshot: friction (lower = more overshoot)
     readonly property real glitchTime: num("glitchTime", 0.6)
+    readonly property real slideTime: num("slideTime", 0.5)             // slide: seconds to glide down
+    readonly property real shakeTime: num("shakeTime", 0.7)             // shake: seconds of rattling
+    readonly property real shakeStrength: num("shakeStrength", 40)      // shake: starting amplitude in pixels
+    readonly property real pendulumSwing: num("pendulumSwing", 55)      // pendulum: starting angle in degrees
+    readonly property real orbitTime: num("orbitTime", 1.8)             // orbit: seconds spent spiraling in
 
     property var anims: []
     property var pending: []
@@ -70,6 +75,19 @@ Item {
         return null;
     }
 
+    // top-left corner of the window when the pendulum hangs at angle theta
+    function pendulumPos(a, theta) {
+        return Qt.point(a.pivot.x + a.len * Math.sin(theta) - a.w / 2, a.pivot.y + a.len * Math.cos(theta) - a.h / 2);
+    }
+
+    // top-left corner on the inward spiral; t runs 0..1
+    function orbitPos(a, t) {
+        const g = a.area;
+        const radius = Math.pow(1 - t, 1.5);
+        const angle = -Math.PI / 2 + a.dir * 2 * Math.PI * 1.5 * (1 - Math.pow(1 - t, 2));
+        return Qt.point(a.rest.x + g.width * 0.38 * radius * Math.cos(angle), a.rest.y + g.height * 0.3 * radius * Math.sin(angle));
+    }
+
     function start(win, screen, animation) {
         const g = screen.geometry;
         const w = restW > 0 ? restW : Math.round(g.width * 0.8);
@@ -93,6 +111,20 @@ Item {
             else a.py = g.y + g.height + 50;
         } else if (a.mode === "glitch") {
             a.px = a.rest.x; a.py = a.rest.y; a.next = 0; a.ox = 0; a.oy = 0; a.op = 0;
+        } else if (a.mode === "slide" || a.mode === "yoyo") {
+            a.px = a.rest.x; a.py = g.y - h;
+        } else if (a.mode === "shake") {
+            a.px = a.rest.x; a.py = a.rest.y;
+        } else if (a.mode === "pendulum") {
+            a.pivot = Qt.point(a.rest.x + w / 2, g.y - 150);           // hangs from a point above the screen
+            a.len = a.rest.y + h / 2 - a.pivot.y;
+            a.theta0 = (Math.random() < 0.5 ? -1 : 1) * pendulumSwing * Math.PI / 180;
+            const p = pendulumPos(a, a.theta0);
+            a.px = p.x; a.py = p.y;
+        } else if (a.mode === "orbit") {
+            a.dir = Math.random() < 0.5 ? -1 : 1;
+            const p = orbitPos(a, 0);
+            a.px = p.x; a.py = p.y;
         } else {
             a.px = a.rest.x; a.py = a.rest.y + 40;
         }
@@ -120,7 +152,36 @@ Item {
         const h = a.h;
         a.elapsed += dt;
         let x = a.px, y = a.py, done = false;
-        if (a.mode === "slingshot") {
+        if (a.mode === "slide") {
+            const t = Math.min(1, a.elapsed / slideTime);
+            const e = 1 - Math.pow(1 - t, 3);
+            x = a.rest.x; y = a.py + (a.rest.y - a.py) * e;
+            if (t >= 1) done = true;
+        } else if (a.mode === "yoyo") {
+            // dropped on a spring from above: falls past its spot, springs back, bobs to rest
+            const k = stiffness, c = damping * 0.55;
+            a.vy += (-k * (a.py - a.rest.y) - c * a.vy) * dt;
+            a.py += a.vy * dt;
+            x = a.rest.x; y = a.py;
+            if ((Math.abs(a.py - a.rest.y) < 1.5 && Math.abs(a.vy) < 8) || a.elapsed > 4) { y = a.rest.y; done = true; }
+        } else if (a.mode === "shake") {
+            const t = Math.min(1, a.elapsed / shakeTime);
+            const amp = shakeStrength * Math.pow(1 - t, 2);
+            x = a.rest.x + Math.sin(a.elapsed * 70) * amp;
+            y = a.rest.y + Math.cos(a.elapsed * 53) * amp * 0.4;
+            a.win.opacity = Math.min(1, a.elapsed / 0.12);
+            if (t >= 1) { x = a.rest.x; y = a.rest.y; a.win.opacity = 1; done = true; }
+        } else if (a.mode === "pendulum") {
+            const theta = a.theta0 * Math.exp(-1.1 * a.elapsed) * Math.cos(3.6 * a.elapsed);
+            const p = pendulumPos(a, theta);
+            x = p.x; y = p.y;
+            if ((a.elapsed > 1 && Math.abs(theta) * a.len < 1.5) || a.elapsed > 4) { x = a.rest.x; y = a.rest.y; done = true; }
+        } else if (a.mode === "orbit") {
+            const t = Math.min(1, a.elapsed / orbitTime);
+            const p = orbitPos(a, t);
+            x = p.x; y = p.y;
+            if (t >= 1) { x = a.rest.x; y = a.rest.y; done = true; }
+        } else if (a.mode === "slingshot") {
             // underdamped spring toward the resting spot: flies in fast, overshoots, snaps back
             a.vx += (-stiffness * (a.px - a.rest.x) - damping * a.vx) * dt;
             a.vy += (-stiffness * (a.py - a.rest.y) - damping * a.vy) * dt;
@@ -175,7 +236,7 @@ Item {
             x = r.x; y = r.y; done = r.done;
         }
         a.win.frameGeometry = Qt.rect(x, y, w, h);
-        if (a.mode !== "fade" && a.mode !== "glitch") a.win.opacity = 1;   // revealed only once it is in motion, not at its default spot
+        if (a.mode !== "fade" && a.mode !== "glitch" && a.mode !== "shake") a.win.opacity = 1;   // revealed only once it is in motion, not at its default spot
         return !done;
     }
 
