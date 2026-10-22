@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+"""Configure the termanim KWin script. Settings live in ~/.config/kwinrc under [Script-termanim]."""
+import json, subprocess, sys, os
+
+GROUP = "Script-termanim"
+PKG = os.path.expanduser("~/.local/share/kwin/scripts/termanim")
+
+def script_path():
+    # the main script's file name changes when the code changes, so KWin never serves a cached copy
+    main = json.load(open(os.path.join(PKG, "metadata.json")))["X-Plasma-MainScript"]
+    return os.path.join(PKG, "contents", main)
+
+KEYS = {
+    "newWindowAnimation": ("gravity", "animation for new terminal windows: gravity | paddle | fade | slingshot | glitch | random"),
+    "hotkeyAnimation":    ("gravity", "animation for the hotkey terminal: gravity | paddle | fade | slingshot | glitch | random"),
+    "randomPool":         ("gravity,paddle,fade,slingshot,glitch", "animations 'random' chooses from (comma separated)"),
+    "newWindowScreen":    ("cursor", "monitor for new windows: cursor, or an output name like DP-3"),
+    "hotkeyScreen":       ("cursor", "monitor for the hotkey terminal: cursor, or an output name"),
+    "terminalClasses":    ("com.mitchellh.ghostty,org.kde.konsole,kitty,Alacritty", "window classes that animate when they open"),
+    "hotkeyClass":        ("dev.termanim.dropdown", "window class toggled by the hotkey"),
+    "hotkey":             ("F12", "hotkey that toggles the drop-down terminal"),
+    "x":                  ("-1", "resting x from the screen's left edge (-1 = centered)"),
+    "y":                  ("-1", "resting y from the screen's top edge (-1 = just below the top bar)"),
+    "width":              ("0", "window width in pixels (0 = 80% of the screen)"),
+    "height":             ("0", "window height in pixels (0 = 85% of the screen)"),
+    "gravity":            ("4.0", "gravity drop: fall acceleration in screen heights per second squared"),
+    "restitution":        ("0.55", "gravity drop: fraction of speed kept per bounce (0-1)"),
+    "bounceTime":         ("2.4", "paddle: seconds spent bouncing"),
+    "settleTime":         ("0.45", "seconds easing into the resting spot"),
+    "slingshotStiffness": ("300", "slingshot: spring pull (higher = snappier)"),
+    "slingshotDamping":   ("11", "slingshot: friction (lower = more overshoot)"),
+    "glitchTime":         ("0.6", "glitch: seconds of flickering"),
+    "fadeTime":           ("0.25", "fade: seconds to fade in"),
+}
+
+def kconf(*args):
+    return subprocess.run(args, capture_output=True, text=True).stdout.strip()
+
+def current(key):
+    v = kconf("kreadconfig6", "--file", "kwinrc", "--group", GROUP, "--key", key)
+    return v if v else KEYS[key][0]
+
+def qdbus(*args):
+    return subprocess.run(["qdbus6", "org.kde.KWin", *args], capture_output=True, text=True).stdout.strip()
+
+def reload():
+    qdbus("/Scripting", "org.kde.kwin.Scripting.unloadScript", "termanim")
+    qdbus("/Scripting", "org.kde.kwin.Scripting.loadDeclarativeScript", script_path(), "termanim")
+    qdbus("/Scripting", "org.kde.kwin.Scripting.start")
+    print("reloaded")
+
+def main(argv):
+    cmd = argv[1] if len(argv) > 1 else "show"
+    if cmd == "show":
+        for k, (d, _) in KEYS.items():
+            v = current(k)
+            print(f"{k:20} {v}" + ("" if v == d else f"   (default {d})"))
+    elif cmd == "keys":
+        for k, (d, doc) in KEYS.items():
+            print(f"{k:20} {doc}  [default {d}]")
+    elif cmd == "set" and len(argv) == 4:
+        k, v = argv[2], argv[3]
+        if k not in KEYS:
+            sys.exit(f"unknown key '{k}' (see: termanim keys)")
+        kconf("kwriteconfig6", "--file", "kwinrc", "--group", GROUP, "--key", k, v)
+        reload()
+    elif cmd == "reset":
+        for k in KEYS:
+            kconf("kwriteconfig6", "--file", "kwinrc", "--group", GROUP, "--key", k, "--delete")
+        reload()
+    elif cmd == "reload":
+        reload()
+    elif cmd == "test":
+        subprocess.run(["qdbus6", "org.kde.kglobalaccel", "/component/kwin",
+                        "org.kde.kglobalaccel.Component.invokeShortcut", "TermAnim"])
+    else:
+        print("usage: termanim [show | keys | set <key> <value> | reset | reload | test]")
+
+main(sys.argv)

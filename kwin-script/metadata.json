@@ -1,0 +1,13 @@
+{
+    "KPackageStructure": "KWin/Script",
+    "KPlugin": {
+        "Id": "termanim",
+        "Name": "Terminal Animations",
+        "Description": "Animates terminal windows (gravity drop, paddle bounce, fade) and provides a hotkey drop-down terminal. Configure with the termanim command.",
+        "Version": "1.0",
+        "EnabledByDefault": true,
+        "License": "MIT"
+    },
+    "X-Plasma-API": "declarativescript",
+    "X-Plasma-MainScript": "v4/main.qml"
+}
