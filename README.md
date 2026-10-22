@@ -100,7 +100,7 @@ A KWin script moves the window frame by frame (about 8 ms per tick) using Plasma
 - KDE Plasma only: it relies on KWin scripting.
 - Animation is script-driven, so it is not GPU-smooth like KWin's built-in effects, and the glitch effect only moves and flickers the window (no tearing or slicing).
 - A new window waits about 0.3 s before animating, because KWin ignores moves while a window is still opening.
-- KWin caches a script's folder. If you edit the code, move `contents/vN` to `contents/vN+1` and update `X-Plasma-MainScript` in `metadata.json`; `termanim reload` follows that path. Changing settings does not need this.
+- KWin keeps compiled scripts for the whole session. `termanim reload` loads the script from a copy named after a hash of its code, so an edit or an update takes effect immediately. Changing settings does not need a reload at all.
 
 ## License
 

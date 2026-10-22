@@ -3,11 +3,20 @@
     "KPlugin": {
         "Id": "termanim",
         "Name": "Terminal Animations",
-        "Description": "Animates terminal windows (gravity drop, paddle bounce, fade) and provides a hotkey drop-down terminal. Configure with the termanim command.",
-        "Version": "1.0",
+        "Description": "Animates terminal windows when they open: gravity drop, paddle bounce, slingshot, glitch, fade, slide, shake, pendulum, orbit and yoyo, on the monitor of the dock you clicked.",
+        "Version": "1.0.2",
         "EnabledByDefault": true,
-        "License": "MIT"
+        "License": "MIT",
+        "Authors": [
+            {
+                "Name": "metalmike17",
+                "Email": "michaeljg0717@gmail.com"
+            }
+        ],
+        "Website": "https://github.com/metalmike17/termanim",
+        "Category": "Windows and Desktop"
     },
     "X-Plasma-API": "declarativescript",
-    "X-Plasma-MainScript": "v6/main.qml"
+    "X-Plasma-MainScript": "ui/main.qml",
+    "X-KDE-ConfigModule": "kwin/effects/configs/kcm_kwin4_genericscripted"
 }

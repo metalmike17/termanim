@@ -1,17 +1,29 @@
 #!/usr/bin/env python3
 """Configure the termanim KWin script. Settings live in ~/.config/kwinrc under [Script-termanim]."""
-import json, subprocess, sys, os
+import hashlib, json, subprocess, sys, os
 
-VERSION = "1.0.1"
+VERSION = "1.0.2"
 GROUP = "Script-termanim"
 # installed per user by install.sh, or system-wide by the AUR package
 PKG_DIRS = [os.path.expanduser("~/.local/share/kwin/scripts/termanim"), "/usr/share/kwin/scripts/termanim"]
 PKG = next((d for d in PKG_DIRS if os.path.isdir(d)), PKG_DIRS[0])
 
 def script_path():
-    # the main script's file name changes when the code changes, so KWin never serves a cached copy
     main = json.load(open(os.path.join(PKG, "metadata.json")))["X-Plasma-MainScript"]
     return os.path.join(PKG, "contents", main)
+
+def cache_busted_script():
+    # KWin keeps compiled QML for the life of the session, keyed by file path. Loading a copy under a
+    # path that includes a hash of the code means an updated script is never served from that cache.
+    with open(script_path(), "rb") as f:
+        code = f.read()
+    folder = os.path.join(os.path.expanduser("~/.cache/termanim"), hashlib.sha1(code).hexdigest()[:12])
+    target = os.path.join(folder, "main.qml")
+    if not os.path.exists(target):
+        os.makedirs(folder, exist_ok=True)
+        with open(target, "wb") as f:
+            f.write(code)
+    return target
 
 KEYS = {
     "newWindowAnimation": ("gravity", "animation for new terminal windows: gravity | paddle | fade | slingshot | glitch | slide | shake | pendulum | orbit | yoyo | random"),
@@ -56,7 +68,7 @@ def qdbus(*args):
 
 def reload():
     qdbus("/Scripting", "org.kde.kwin.Scripting.unloadScript", "termanim")
-    qdbus("/Scripting", "org.kde.kwin.Scripting.loadDeclarativeScript", script_path(), "termanim")
+    qdbus("/Scripting", "org.kde.kwin.Scripting.loadDeclarativeScript", cache_busted_script(), "termanim")
     qdbus("/Scripting", "org.kde.kwin.Scripting.start")
     print("reloaded")
 

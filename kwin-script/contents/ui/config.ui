@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TermAnimConfigForm</class>
+ <widget class="QWidget" name="TermAnimConfigForm">
+  <property name="geometry"><rect><x>0</x><y>0</y><width>560</width><height>520</height></rect></property>
+  <property name="windowTitle"><string>Terminal Animations</string></property>
+  <layout class="QVBoxLayout" name="mainLayout">
+   <item>
+    <widget class="QTabWidget" name="tabs">
+     <property name="currentIndex"><number>0</number></property>
+<widget class="QWidget" name="tabGeneral">
+ <attribute name="title"><string>Animations</string></attribute>
+ <layout class="QGridLayout" name="grid_tabGeneral">
+ <item row="0" column="0">
+  <widget class="QLabel" name="label_tabGeneral_0"><property name="text"><string>Hotkey terminal animation</string></property></widget>
+ </item>
+ <item row="0" column="1">
+  <widget class="QComboBox" name="kcfg_hotkeyAnimation"><property name="editable"><bool>true</bool></property><property name="toolTip"><string>Animation played when the hotkey terminal appears</string></property><item><property name="text"><string>gravity</string></property></item><item><property name="text"><string>paddle</string></property></item><item><property name="text"><string>slingshot</string></property></item><item><property name="text"><string>glitch</string></property></item><item><property name="text"><string>fade</string></property></item><item><property name="text"><string>slide</string></property></item><item><property name="text"><string>shake</string></property></item><item><property name="text"><string>pendulum</string></property></item><item><property name="text"><string>orbit</string></property></item><item><property name="text"><string>yoyo</string></property></item><item><property name="text"><string>random</string></property></item></widget>
+ </item>
+ <item row="1" column="0">
+  <widget class="QLabel" name="label_tabGeneral_1"><property name="text"><string>Hotkey terminal monitor</string></property></widget>
+ </item>
+ <item row="1" column="1">
+  <widget class="QLineEdit" name="kcfg_hotkeyScreen"><property name="toolTip"><string>'cursor' (the screen the mouse is on) or an output name such as DP-3</string></property></widget>
+ </item>
+ <item row="2" column="0">
+  <widget class="QLabel" name="label_tabGeneral_2"><property name="text"><string>Hotkey</string></property></widget>
+ </item>
+ <item row="2" column="1">
+  <widget class="QLineEdit" name="kcfg_hotkey"><property name="toolTip"><string>Shortcut that toggles the drop-down terminal</string></property></widget>
+ </item>
+ <item row="3" column="0">
+  <widget class="QLabel" name="label_tabGeneral_3"><property name="text"><string>Hotkey terminal window class</string></property></widget>
+ </item>
+ <item row="3" column="1">
+  <widget class="QLineEdit" name="kcfg_hotkeyClass"><property name="toolTip"><string>Window class of the terminal window the hotkey toggles</string></property></widget>
+ </item>
+ <item row="4" column="0">
+  <widget class="QLabel" name="label_tabGeneral_4"><property name="text"><string>New window animation</string></property></widget>
+ </item>
+ <item row="4" column="1">
+  <widget class="QComboBox" name="kcfg_newWindowAnimation"><property name="editable"><bool>true</bool></property><property name="toolTip"><string>Animation played when a terminal window opens</string></property><item><property name="text"><string>gravity</string></property></item><item><property name="text"><string>paddle</string></property></item><item><property name="text"><string>slingshot</string></property></item><item><property name="text"><string>glitch</string></property></item><item><property name="text"><string>fade</string></property></item><item><property name="text"><string>slide</string></property></item><item><property name="text"><string>shake</string></property></item><item><property name="text"><string>pendulum</string></property></item><item><property name="text"><string>orbit</string></property></item><item><property name="text"><string>yoyo</string></property></item><item><property name="text"><string>random</string></property></item></widget>
+ </item>
+ <item row="5" column="0">
+  <widget class="QLabel" name="label_tabGeneral_5"><property name="text"><string>New window monitor</string></property></widget>
+ </item>
+ <item row="5" column="1">
+  <widget class="QLineEdit" name="kcfg_newWindowScreen"><property name="toolTip"><string>'cursor' (the screen the mouse is on) or an output name such as DP-3</string></property></widget>
+ </item>
+ <item row="6" column="0">
+  <widget class="QLabel" name="label_tabGeneral_6"><property name="text"><string>Terminal window classes</string></property></widget>
+ </item>
+ <item row="6" column="1">
+  <widget class="QLineEdit" name="kcfg_terminalClasses"><property name="toolTip"><string>Comma separated window classes that animate when they open</string></property></widget>
+ </item>
+ <item row="7" column="0">
+  <widget class="QLabel" name="label_tabGeneral_7"><property name="text"><string>Random picks from</string></property></widget>
+ </item>
+ <item row="7" column="1">
+  <widget class="QLineEdit" name="kcfg_randomPool"><property name="toolTip"><string>Comma separated animations the random choice draws on</string></property></widget>
+ </item>
+  <item row="8" column="0"><spacer name="sp_tabGeneral"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
+ </layout>
+</widget>
+<widget class="QWidget" name="tabSize">
+ <attribute name="title"><string>Size and position</string></attribute>
+ <layout class="QGridLayout" name="grid_tabSize">
+ <item row="0" column="0">
+  <widget class="QLabel" name="label_tabSize_0"><property name="text"><string>Width (pixels)</string></property></widget>
+ </item>
+ <item row="0" column="1">
+  <widget class="QSpinBox" name="kcfg_width"><property name="toolTip"><string>0 = 80% of the screen</string></property><property name="minimum"><number>0</number></property><property name="maximum"><number>7680</number></property></widget>
+ </item>
+ <item row="1" column="0">
+  <widget class="QLabel" name="label_tabSize_1"><property name="text"><string>Height (pixels)</string></property></widget>
+ </item>
+ <item row="1" column="1">
+  <widget class="QSpinBox" name="kcfg_height"><property name="toolTip"><string>0 = 85% of the screen</string></property><property name="minimum"><number>0</number></property><property name="maximum"><number>4320</number></property></widget>
+ </item>
+ <item row="2" column="0">
+  <widget class="QLabel" name="label_tabSize_2"><property name="text"><string>Left (pixels)</string></property></widget>
+ </item>
+ <item row="2" column="1">
+  <widget class="QSpinBox" name="kcfg_x"><property name="toolTip"><string>-1 = centered</string></property><property name="minimum"><number>-1</number></property><property name="maximum"><number>7680</number></property></widget>
+ </item>
+ <item row="3" column="0">
+  <widget class="QLabel" name="label_tabSize_3"><property name="text"><string>Top (pixels)</string></property></widget>
+ </item>
+ <item row="3" column="1">
+  <widget class="QSpinBox" name="kcfg_y"><property name="toolTip"><string>-1 = just below the top bar</string></property><property name="minimum"><number>-1</number></property><property name="maximum"><number>4320</number></property></widget>
+ </item>
+  <item row="4" column="0"><spacer name="sp_tabSize"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
+ </layout>
+</widget>
+<widget class="QWidget" name="tabTuning">
+ <attribute name="title"><string>Tuning</string></attribute>
+ <layout class="QGridLayout" name="grid_tabTuning">
+ <item row="0" column="0">
+  <widget class="QLabel" name="label_tabTuning_0"><property name="text"><string>Gravity</string></property></widget>
+ </item>
+ <item row="0" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_gravity"><property name="toolTip"><string>Gravity drop: fall acceleration in screen heights per second squared</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>0.5</double></property><property name="maximum"><double>12</double></property><property name="singleStep"><double>0.1</double></property></widget>
+ </item>
+ <item row="1" column="0">
+  <widget class="QLabel" name="label_tabTuning_1"><property name="text"><string>Bounciness</string></property></widget>
+ </item>
+ <item row="1" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_restitution"><property name="toolTip"><string>Gravity drop: fraction of speed kept after each bounce</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>0</double></property><property name="maximum"><double>0.95</double></property><property name="singleStep"><double>0.05</double></property></widget>
+ </item>
+ <item row="2" column="0">
+  <widget class="QLabel" name="label_tabTuning_2"><property name="text"><string>Paddle bounce time (s)</string></property></widget>
+ </item>
+ <item row="2" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_bounceTime"><property name="toolTip"><string>Paddle: seconds spent bouncing</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>0.5</double></property><property name="maximum"><double>8</double></property><property name="singleStep"><double>0.1</double></property></widget>
+ </item>
+ <item row="3" column="0">
+  <widget class="QLabel" name="label_tabTuning_3"><property name="text"><string>Settle time (s)</string></property></widget>
+ </item>
+ <item row="3" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_settleTime"><property name="toolTip"><string>Seconds easing into the resting spot</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>0.1</double></property><property name="maximum"><double>2</double></property><property name="singleStep"><double>0.05</double></property></widget>
+ </item>
+ <item row="4" column="0">
+  <widget class="QLabel" name="label_tabTuning_4"><property name="text"><string>Slingshot stiffness</string></property></widget>
+ </item>
+ <item row="4" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_slingshotStiffness"><property name="toolTip"><string>Higher is snappier</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>50</double></property><property name="maximum"><double>1000</double></property><property name="singleStep"><double>10</double></property></widget>
+ </item>
+ <item row="5" column="0">
+  <widget class="QLabel" name="label_tabTuning_5"><property name="text"><string>Slingshot friction</string></property></widget>
+ </item>
+ <item row="5" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_slingshotDamping"><property name="toolTip"><string>Lower overshoots more</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>2</double></property><property name="maximum"><double>40</double></property><property name="singleStep"><double>1</double></property></widget>
+ </item>
+ <item row="6" column="0">
+  <widget class="QLabel" name="label_tabTuning_6"><property name="text"><string>Glitch time (s)</string></property></widget>
+ </item>
+ <item row="6" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_glitchTime"><property name="toolTip"><string>Seconds of flickering</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>0.2</double></property><property name="maximum"><double>3</double></property><property name="singleStep"><double>0.1</double></property></widget>
+ </item>
+ <item row="7" column="0">
+  <widget class="QLabel" name="label_tabTuning_7"><property name="text"><string>Fade time (s)</string></property></widget>
+ </item>
+ <item row="7" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_fadeTime"><property name="toolTip"><string>Seconds to fade in</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>0.05</double></property><property name="maximum"><double>2</double></property><property name="singleStep"><double>0.05</double></property></widget>
+ </item>
+ <item row="8" column="0">
+  <widget class="QLabel" name="label_tabTuning_8"><property name="text"><string>Slide time (s)</string></property></widget>
+ </item>
+ <item row="8" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_slideTime"><property name="toolTip"><string>Seconds to glide down</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>0.1</double></property><property name="maximum"><double>3</double></property><property name="singleStep"><double>0.05</double></property></widget>
+ </item>
+ <item row="9" column="0">
+  <widget class="QLabel" name="label_tabTuning_9"><property name="text"><string>Shake time (s)</string></property></widget>
+ </item>
+ <item row="9" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_shakeTime"><property name="toolTip"><string>Seconds of rattling</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>0.2</double></property><property name="maximum"><double>3</double></property><property name="singleStep"><double>0.1</double></property></widget>
+ </item>
+ <item row="10" column="0">
+  <widget class="QLabel" name="label_tabTuning_10"><property name="text"><string>Shake strength (px)</string></property></widget>
+ </item>
+ <item row="10" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_shakeStrength"><property name="toolTip"><string>Starting size of the shake</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>5</double></property><property name="maximum"><double>150</double></property><property name="singleStep"><double>5</double></property></widget>
+ </item>
+ <item row="11" column="0">
+  <widget class="QLabel" name="label_tabTuning_11"><property name="text"><string>Pendulum swing (degrees)</string></property></widget>
+ </item>
+ <item row="11" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_pendulumSwing"><property name="toolTip"><string>Starting swing angle</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>10</double></property><property name="maximum"><double>80</double></property><property name="singleStep"><double>5</double></property></widget>
+ </item>
+ <item row="12" column="0">
+  <widget class="QLabel" name="label_tabTuning_12"><property name="text"><string>Orbit time (s)</string></property></widget>
+ </item>
+ <item row="12" column="1">
+  <widget class="QDoubleSpinBox" name="kcfg_orbitTime"><property name="toolTip"><string>Seconds spent spiraling in</string></property><property name="decimals"><number>2</number></property><property name="minimum"><double>0.5</double></property><property name="maximum"><double>5</double></property><property name="singleStep"><double>0.1</double></property></widget>
+ </item>
+  <item row="13" column="0"><spacer name="sp_tabTuning"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
+ </layout>
+</widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</ui>
