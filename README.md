@@ -31,6 +31,16 @@ Each trigger has its own animation: **new terminal windows** (any app in `termin
 
 ## Install
 
+Download `termanim-1.0.0.tar.gz` from the [latest release](https://github.com/metalmike17/termanim/releases/latest), then:
+
+```sh
+tar xzf termanim-1.0.0.tar.gz
+cd termanim-1.0.0
+./install.sh
+```
+
+Or from source:
+
 ```sh
 git clone https://github.com/metalmike17/termanim
 cd termanim
