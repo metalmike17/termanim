@@ -1,0 +1,242 @@
+#!/usr/bin/env python3
+"""Settings window for termanim. Changes apply as you make them."""
+import contextlib, importlib.machinery, importlib.util, io, json, os, subprocess, sys
+
+import gi
+gi.require_version("Gtk", "4.0")
+gi.require_version("Adw", "1")
+from gi.repository import Adw, GLib, Gtk
+
+# reuse the command-line tool's setting table and helpers
+_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "termanim")
+_loader = importlib.machinery.SourceFileLoader("termanim_cli", _path)
+_spec = importlib.util.spec_from_loader("termanim_cli", _loader)
+cli = importlib.util.module_from_spec(_spec)
+_loader.exec_module(cli)
+
+ANIMATIONS = ["gravity", "paddle", "slingshot", "glitch", "fade", "random"]
+POOL = ["gravity", "paddle", "slingshot", "glitch", "fade"]
+APPLY_DELAY_MS = 600   # wait for the user to stop adjusting before reloading the script
+
+
+def outputs():
+    try:
+        data = json.loads(subprocess.run(["kscreen-doctor", "-j"], capture_output=True, text=True).stdout)
+        return [o["name"] for o in data["outputs"] if o.get("enabled")]
+    except Exception:
+        return []
+
+
+class Settings(Adw.ApplicationWindow):
+    def __init__(self, app):
+        super().__init__(application=app, title="Terminal Animations", default_width=620, default_height=820)
+        self.pending = {}
+        self.timer = 0
+        self.loading = True
+        self.screens = ["cursor"] + outputs()
+
+        page = Adw.PreferencesPage()
+        view = Adw.ToolbarView()
+        header = Adw.HeaderBar()
+        play = Gtk.Button(label="Play animation")
+        play.add_css_class("suggested-action")
+        play.set_tooltip_text("Plays the hotkey terminal's animation (same as pressing the hotkey)")
+        play.connect("clicked", lambda *_: cli.main(["termanim", "test"]))
+        header.pack_start(play)
+        view.add_top_bar(header)
+        view.set_content(page)
+        self.set_content(view)
+
+        self.hotkey_group(page)
+        self.window_group(page)
+        self.random_group(page)
+        self.size_group(page)
+        self.physics_group(page)
+        self.reset_group(page)
+        self.loading = False
+
+    # ---- helpers -------------------------------------------------------
+    def queue(self, key, value):
+        if self.loading:
+            return
+        self.pending[key] = value
+        if self.timer:
+            GLib.source_remove(self.timer)
+        self.timer = GLib.timeout_add(APPLY_DELAY_MS, self.apply)
+
+    def apply(self):
+        self.timer = 0
+        for key, value in self.pending.items():
+            cli.write(key, value)
+        self.pending = {}
+        with contextlib.redirect_stdout(io.StringIO()):
+            cli.reload()
+        return False
+
+    def combo(self, group, title, subtitle, key, choices, labels=None):
+        current = cli.current(key)
+        shown = list(labels or choices)
+        if current not in choices:       # a value set by hand, e.g. a monitor that is unplugged
+            choices.append(current)
+            shown.append(current)
+        row = Adw.ComboRow(title=title, subtitle=subtitle)
+        row.set_model(Gtk.StringList.new(shown))
+        row.set_selected(choices.index(current))
+        row.connect("notify::selected", lambda r, _p: self.queue(key, choices[r.get_selected()]))
+        group.add(row)
+        return row
+
+    def entry(self, group, title, key):
+        row = Adw.EntryRow(title=title, show_apply_button=True)
+        row.set_text(cli.current(key))
+        row.connect("apply", lambda r: self.queue(key, r.get_text().strip()))
+        group.add(row)
+        return row
+
+    def spin(self, group, title, subtitle, key, low, high, step, digits=0, add=True):
+        row = Adw.SpinRow(title=title, subtitle=subtitle, digits=digits,
+                          adjustment=Gtk.Adjustment(value=float(cli.current(key)), lower=low, upper=high,
+                                                    step_increment=step, page_increment=step * 10))
+        row.connect("notify::value", lambda r, _p: self.queue(key, round(r.get_value(), 3) if digits else int(r.get_value())))
+        if add:
+            group.add(row)
+        return row
+
+    # ---- sections ------------------------------------------------------
+    def screen_labels(self):
+        return ["Mouse's screen"] + self.screens[1:]
+
+    def hotkey_group(self, page):
+        g = Adw.PreferencesGroup(title="Hotkey terminal", description="The drop-down terminal toggled by the hotkey")
+        self.combo(g, "Animation", "Plays each time it appears", "hotkeyAnimation", list(ANIMATIONS))
+        self.combo(g, "Monitor", "Where it appears", "hotkeyScreen", list(self.screens), self.screen_labels())
+        self.entry(g, "Hotkey", "hotkey")
+        page.add(g)
+
+    def window_group(self, page):
+        g = Adw.PreferencesGroup(title="New terminal windows",
+                                 description="Terminals opened from a dock, launcher or shortcut")
+        self.combo(g, "Animation", "Plays when a terminal window opens", "newWindowAnimation", list(ANIMATIONS))
+        self.combo(g, "Monitor", "Mouse's screen = the dock you clicked",
+                   "newWindowScreen", list(self.screens), self.screen_labels())
+        self.entry(g, "Terminal window classes", "terminalClasses")
+        page.add(g)
+
+    def random_group(self, page):
+        g = Adw.PreferencesGroup(title="Random", description="What the Random animation picks from")
+        current = [s.strip() for s in cli.current("randomPool").split(",") if s.strip()]
+        rows = []
+        for name in POOL:
+            row = Adw.SwitchRow(title=name.capitalize(), active=name in current)
+            rows.append((name, row))
+            g.add(row)
+
+        def changed(row, _p):
+            chosen = [n for n, r in rows if r.get_active()]
+            if not chosen:             # keep at least one animation in the pool
+                row.set_active(True)
+                return
+            self.queue("randomPool", ",".join(chosen))
+        for _n, row in rows:
+            row.connect("notify::active", changed)
+        page.add(g)
+
+    def size_group(self, page):
+        g = Adw.PreferencesGroup(title="Size and position", description="Where the terminal comes to rest")
+        w, h = float(cli.current("width")), float(cli.current("height"))
+        x, y = float(cli.current("x")), float(cli.current("y"))
+
+        auto_size = Adw.SwitchRow(title="Automatic size", subtitle="80% of the screen wide, 85% tall", active=w <= 0 or h <= 0)
+        width = self.spin(g, "Width", "Pixels", "width", 300, 7680, 20, add=False)
+        height = self.spin(g, "Height", "Pixels", "height", 200, 4320, 20, add=False)
+        auto_pos = Adw.SwitchRow(title="Automatic position", subtitle="Centered, just below the top bar", active=x < 0 or y < 0)
+        xpos = self.spin(g, "Left", "Pixels from the screen's left edge", "x", 0, 7680, 5, add=False)
+        ypos = self.spin(g, "Top", "Pixels from the screen's top edge", "y", 0, 4320, 5, add=False)
+        for row in (auto_size, width, height, auto_pos, xpos, ypos):
+            g.add(row)
+
+        def size_toggled(*_a):
+            on = auto_size.get_active()
+            width.set_sensitive(not on)
+            height.set_sensitive(not on)
+            if on:
+                self.queue("width", 0); self.queue("height", 0)
+            else:
+                if width.get_value() <= 0: width.set_value(1400)
+                if height.get_value() <= 0: height.set_value(800)
+                self.queue("width", int(width.get_value())); self.queue("height", int(height.get_value()))
+
+        def pos_toggled(*_a):
+            on = auto_pos.get_active()
+            xpos.set_sensitive(not on)
+            ypos.set_sensitive(not on)
+            if on:
+                self.queue("x", -1); self.queue("y", -1)
+            else:
+                if xpos.get_value() < 0: xpos.set_value(100)
+                if ypos.get_value() < 0: ypos.set_value(40)
+                self.queue("x", int(xpos.get_value())); self.queue("y", int(ypos.get_value()))
+
+        auto_size.connect("notify::active", size_toggled)
+        auto_pos.connect("notify::active", pos_toggled)
+        width.set_sensitive(not auto_size.get_active()); height.set_sensitive(not auto_size.get_active())
+        xpos.set_sensitive(not auto_pos.get_active()); ypos.set_sensitive(not auto_pos.get_active())
+        page.add(g)
+
+    def physics_group(self, page):
+        g = Adw.PreferencesGroup(title="Tuning", description="Feel of each animation")
+        self.spin(g, "Gravity", "Gravity drop: fall acceleration (screen heights per second squared)", "gravity", 0.5, 12, 0.1, 1)
+        self.spin(g, "Bounciness", "Gravity drop: speed kept after each bounce, 0 to 0.95", "restitution", 0, 0.95, 0.05, 2)
+        self.spin(g, "Bounce time", "Paddle: seconds spent bouncing", "bounceTime", 0.5, 8, 0.1, 1)
+        self.spin(g, "Slingshot stiffness", "Higher is snappier", "slingshotStiffness", 50, 1000, 10)
+        self.spin(g, "Slingshot friction", "Lower overshoots more", "slingshotDamping", 2, 40, 1)
+        self.spin(g, "Glitch time", "Seconds of flickering", "glitchTime", 0.2, 3, 0.1, 1)
+        self.spin(g, "Fade time", "Seconds to fade in", "fadeTime", 0.05, 2, 0.05, 2)
+        self.spin(g, "Settle time", "Seconds easing into the resting spot", "settleTime", 0.1, 2, 0.05, 2)
+        page.add(g)
+
+    def reset_group(self, page):
+        g = Adw.PreferencesGroup()
+        row = Adw.ActionRow(title="Reset all settings", subtitle="Restores the defaults for every option")
+        button = Gtk.Button(label="Reset", valign=Gtk.Align.CENTER)
+        button.add_css_class("destructive-action")
+        button.connect("clicked", self.confirm_reset)
+        row.add_suffix(button)
+        g.add(row)
+        page.add(g)
+
+    def confirm_reset(self, *_a):
+        dialog = Adw.AlertDialog(heading="Reset all settings?", body="Every option goes back to its default.")
+        dialog.add_response("cancel", "Cancel")
+        dialog.add_response("reset", "Reset")
+        dialog.set_response_appearance("reset", Adw.ResponseAppearance.DESTRUCTIVE)
+        dialog.connect("response", lambda _d, r: self.do_reset() if r == "reset" else None)
+        dialog.present(self)
+
+    def do_reset(self):
+        if self.timer:
+            GLib.source_remove(self.timer)
+            self.timer = 0
+        self.pending = {}
+        with contextlib.redirect_stdout(io.StringIO()):
+            cli.main(["termanim", "reset"])
+        self.get_application().rebuild()
+
+
+class App(Adw.Application):
+    def __init__(self):
+        super().__init__(application_id="dev.termanim.settings")
+        self.window = None
+
+    def do_activate(self):
+        self.rebuild()
+
+    def rebuild(self):
+        if self.window:
+            self.window.destroy()
+        self.window = Settings(self)
+        self.window.present()
+
+
+if __name__ == "__main__":
+    sys.exit(App().run(sys.argv))

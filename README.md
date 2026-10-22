@@ -22,6 +22,7 @@ Each trigger has its own animation: **new terminal windows** (any app in `termin
 - KDE Plasma 6 on Wayland (tested on Plasma 6.8, KWin 6.8)
 - [Ghostty](https://ghostty.org) for the hotkey terminal. New-window animations work for any terminal listed in `terminalClasses`.
 - `kwriteconfig6`, `kreadconfig6`, `qdbus6` (shipped with Plasma), Python 3
+- For the settings window: PyGObject, GTK 4 and libadwaita (`python-gobject`, `gtk4`, `libadwaita` on Arch)
 
 ## Install
 
@@ -33,7 +34,17 @@ cd termanim
 
 Press **F12**. `./uninstall.sh` removes everything.
 
-## Configure
+## Settings window
+
+Open **Terminal Animations** from your app menu, or run `termanim-settings`. Changes apply as you make them, and **Play animation** previews the hotkey terminal.
+
+<img src="media/settings.png" alt="termanim settings window" width="420">
+
+It covers the animation and monitor for the hotkey terminal and for new windows, the hotkey, which window classes animate, the pool for random, size and position, and the physics tuning for each animation.
+
+## Command line
+
+Everything in the settings window is also available from the terminal.
 
 Settings live in `~/.config/kwinrc` under `[Script-termanim]`. Use the `termanim` command:
 

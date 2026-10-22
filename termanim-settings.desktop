@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Terminal Animations
+Comment=Settings for termanim terminal animations
+Exec=termanim-settings
+Icon=utilities-terminal
+Categories=Settings;

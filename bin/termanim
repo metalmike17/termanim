@@ -40,6 +40,9 @@ def current(key):
     v = kconf("kreadconfig6", "--file", "kwinrc", "--group", GROUP, "--key", key)
     return v if v else KEYS[key][0]
 
+def write(key, value):
+    kconf("kwriteconfig6", "--file", "kwinrc", "--group", GROUP, "--key", key, str(value))
+
 def qdbus(*args):
     return subprocess.run(["qdbus6", "org.kde.KWin", *args], capture_output=True, text=True).stdout.strip()
 
@@ -62,7 +65,7 @@ def main(argv):
         k, v = argv[2], argv[3]
         if k not in KEYS:
             sys.exit(f"unknown key '{k}' (see: termanim keys)")
-        kconf("kwriteconfig6", "--file", "kwinrc", "--group", GROUP, "--key", k, v)
+        write(k, v)
         reload()
     elif cmd == "reset":
         for k in KEYS:
@@ -76,4 +79,5 @@ def main(argv):
     else:
         print("usage: termanim [show | keys | set <key> <value> | reset | reload | test]")
 
-main(sys.argv)
+if __name__ == "__main__":
+    main(sys.argv)
