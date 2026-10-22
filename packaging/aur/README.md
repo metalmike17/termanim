@@ -24,6 +24,6 @@ git clone ssh://aur@aur.archlinux.org/termanim.git aur-termanim
 cp PKGBUILD .SRCINFO termanim.install aur-termanim/
 cd aur-termanim
 git add PKGBUILD .SRCINFO termanim.install
-git commit -m "termanim 1.0.1"
+git commit -m "termanim 1.0.2"
 git push
 ```

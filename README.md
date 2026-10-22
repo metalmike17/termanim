@@ -31,11 +31,11 @@ Each trigger has its own animation: **new terminal windows** (any app in `termin
 
 ## Install
 
-Download `termanim-1.0.0.tar.gz` from the [latest release](https://github.com/metalmike17/termanim/releases/latest), then:
+Download the `termanim-X.Y.Z.tar.gz` file from the [latest release](https://github.com/metalmike17/termanim/releases/latest), then (replacing X.Y.Z with the version you downloaded):
 
 ```sh
-tar xzf termanim-1.0.0.tar.gz
-cd termanim-1.0.0
+tar xzf termanim-X.Y.Z.tar.gz
+cd termanim-X.Y.Z
 ./install.sh
 ```
 

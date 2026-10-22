@@ -1,6 +1,6 @@
 # Maintainer: metalmike17 <michaeljg0717@gmail.com>
 pkgname=termanim
-pkgver=1.0.1
+pkgver=1.0.2
 pkgrel=1
 pkgdesc='Animated terminals for KDE Plasma: gravity drop, slingshot, glitch and more, plus a hotkey drop-down terminal'
 arch=('any')
@@ -11,7 +11,7 @@ optdepends=('ghostty: the hotkey drop-down terminal'
             'kscreen: lists your monitors in the settings window')
 install=termanim.install
 source=("$pkgname-$pkgver.tar.gz::$url/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('e6cf65a4162ffa4a874610f05a82e3b9ee5b19cc5b06dd982f0068f33877dd39')
+sha256sums=('3040bccb5df343df6db15cb62688ff7683d8265ff2673c113731d9e0b1894dda')
 
 package() {
   cd "$pkgname-$pkgver"

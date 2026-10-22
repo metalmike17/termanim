@@ -6,7 +6,7 @@ post_install() {
 }
 
 post_upgrade() {
-  echo "==> termanim updated. Run 'termanim reload' to load the new version."
+  echo "==> termanim updated. Run 'termanim reload' (or log out and back in) to load the new version."
 }
 
 pre_remove() {

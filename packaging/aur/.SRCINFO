@@ -1,6 +1,6 @@
 pkgbase = termanim
 	pkgdesc = Animated terminals for KDE Plasma: gravity drop, slingshot, glitch and more, plus a hotkey drop-down terminal
-	pkgver = 1.0.1
+	pkgver = 1.0.2
 	pkgrel = 1
 	url = https://github.com/metalmike17/termanim
 	install = termanim.install
@@ -15,7 +15,7 @@ pkgbase = termanim
 	depends = libadwaita
 	optdepends = ghostty: the hotkey drop-down terminal
 	optdepends = kscreen: lists your monitors in the settings window
-	source = termanim-1.0.1.tar.gz::https://github.com/metalmike17/termanim/releases/download/v1.0.1/termanim-1.0.1.tar.gz
-	sha256sums = e6cf65a4162ffa4a874610f05a82e3b9ee5b19cc5b06dd982f0068f33877dd39
+	source = termanim-1.0.2.tar.gz::https://github.com/metalmike17/termanim/releases/download/v1.0.2/termanim-1.0.2.tar.gz
+	sha256sums = 3040bccb5df343df6db15cb62688ff7683d8265ff2673c113731d9e0b1894dda
 
 pkgname = termanim
