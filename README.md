@@ -43,7 +43,9 @@ Press **F12**. `./uninstall.sh` removes everything.
 
 Open **Terminal Animations** from your app menu, or run `termanim-settings`. Changes apply as you make them, and **Play animation** previews the hotkey terminal.
 
-<img src="media/settings.png" alt="termanim settings window" width="420">
+<img src="media/settings.png" alt="termanim settings window, scrolled from top to bottom in four panels" width="760">
+
+The whole window, scrolled top to bottom.
 
 It covers the animation and monitor for the hotkey terminal and for new windows, the hotkey, which window classes animate, the pool for random, size and position, and the tuning for each animation.
 
