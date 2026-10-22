@@ -47,6 +47,19 @@ cd termanim
 ./install.sh
 ```
 
+### Arch Linux / CachyOS
+
+The repo includes a `PKGBUILD`, so pacman can install and track it:
+
+```sh
+git clone https://github.com/metalmike17/termanim
+cd termanim/packaging/aur
+makepkg -si
+termanim setup
+```
+
+`termanim setup` enables the KWin script and starts the hotkey terminal for your user; run it once as your normal user. Remove with `pacman -R termanim`.
+
 Press **F12**. `./uninstall.sh` removes everything.
 
 ## Settings window
