@@ -1,0 +1,30 @@
+# Maintainer: metalmike17 <michaeljg0717@gmail.com>
+pkgname=termanim
+pkgver=1.0.1
+pkgrel=1
+pkgdesc='Animated terminals for KDE Plasma: gravity drop, slingshot, glitch and more, plus a hotkey drop-down terminal'
+arch=('any')
+url='https://github.com/metalmike17/termanim'
+license=('MIT')
+depends=('kwin' 'kconfig' 'qt6-tools' 'python' 'python-gobject' 'gtk4' 'libadwaita')
+optdepends=('ghostty: the hotkey drop-down terminal'
+            'kscreen: lists your monitors in the settings window')
+install=termanim.install
+source=("$pkgname-$pkgver.tar.gz::$url/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('e6cf65a4162ffa4a874610f05a82e3b9ee5b19cc5b06dd982f0068f33877dd39')
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  install -Dm755 bin/termanim "$pkgdir/usr/bin/termanim"
+  install -Dm755 bin/termanim-settings "$pkgdir/usr/bin/termanim-settings"
+  install -Dm644 termanim-settings.desktop "$pkgdir/usr/share/applications/termanim-settings.desktop"
+
+  # the KWin script, in the system script directory
+  install -d "$pkgdir/usr/share/kwin/scripts"
+  cp -r kwin-script "$pkgdir/usr/share/kwin/scripts/termanim"
+
+  install -Dm644 packaging/termanim-terminal.service "$pkgdir/usr/lib/systemd/user/termanim-terminal.service"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
