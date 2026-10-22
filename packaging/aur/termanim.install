@@ -1,0 +1,15 @@
+post_install() {
+  echo "==> To finish setting up termanim, run as your normal user (not root):"
+  echo "      termanim setup"
+  echo "    It enables the KWin script and starts the hotkey terminal (F12)."
+  echo "    Then open \"Terminal Animations\" from your app menu to change the settings."
+}
+
+post_upgrade() {
+  echo "==> termanim updated. Run 'termanim reload' to load the new version."
+}
+
+pre_remove() {
+  echo "==> Before removing, you can run 'termanim reset' and"
+  echo "    'systemctl --user disable --now termanim-terminal' to clear your settings."
+}
