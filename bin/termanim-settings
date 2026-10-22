@@ -37,12 +37,17 @@ class Settings(Adw.ApplicationWindow):
 
         page = Adw.PreferencesPage()
         view = Adw.ToolbarView()
-        header = Adw.HeaderBar()
+        # the KDE GTK theme hides the native window buttons, so the header draws its own close button
+        header = Adw.HeaderBar(decoration_layout=":")
         play = Gtk.Button(label="Play animation")
         play.add_css_class("suggested-action")
         play.set_tooltip_text("Plays the hotkey terminal's animation (same as pressing the hotkey)")
         play.connect("clicked", lambda *_: cli.main(["termanim", "test"]))
         header.pack_start(play)
+        close = Gtk.Button(icon_name="window-close-symbolic", tooltip_text="Close (Ctrl+W)")
+        close.add_css_class("flat")
+        close.connect("clicked", lambda *_: self.close())
+        header.pack_end(close)
         view.add_top_bar(header)
         view.set_content(page)
         self.set_content(view)
@@ -234,6 +239,10 @@ class App(Adw.Application):
     def __init__(self):
         super().__init__(application_id="dev.termanim.settings")
         self.window = None
+
+    def do_startup(self):
+        Adw.Application.do_startup(self)
+        self.set_accels_for_action("window.close", ["<Control>w", "<Control>q"])
 
     def do_activate(self):
         self.rebuild()
