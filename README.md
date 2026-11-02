@@ -1,8 +1,29 @@
-# termanim
+<div align="center">
 
-Animated terminals for KDE Plasma (Wayland). Terminal windows fall, bounce, slingshot, glitch or fade into place instead of just appearing, and one hotkey summons a drop-down terminal with the same animations.
+<img src="media/banner.svg" alt="termanim: animated terminals for KDE Plasma" width="100%">
 
-![demo](media/demo.gif)
+<br>
+
+<a href="https://github.com/metalmike17/termanim/releases/latest"><img src="https://img.shields.io/github/v/release/metalmike17/termanim?style=for-the-badge&labelColor=0D0F14&color=00C8D6&label=release" alt="Latest release"></a>
+<img src="https://img.shields.io/badge/license-MIT-FF2BD6?style=for-the-badge&labelColor=0D0F14" alt="License">
+<img src="https://img.shields.io/badge/KDE%20Plasma-6%20Wayland-FF2BD6?style=for-the-badge&labelColor=0D0F14&logo=kde&logoColor=white" alt="KDE Plasma 6">
+<a href="https://github.com/metalmike17/termanim/stargazers"><img src="https://img.shields.io/github/stars/metalmike17/termanim?style=for-the-badge&labelColor=0D0F14&color=00C8D6" alt="Stars"></a>
+
+<br><br>
+
+**[🚀 Install](#install)** &nbsp;·&nbsp; **[🎞️ Animations](#animations)** &nbsp;·&nbsp; **[⚙️ Settings](#settings-window)** &nbsp;·&nbsp; **[⌨️ CLI](#command-line)** &nbsp;·&nbsp; **[⬇️ Download](https://github.com/metalmike17/termanim/releases/latest)**
+
+<br>
+
+<img src="media/demo.gif" alt="termanim demo" width="760">
+
+</div>
+
+<img src="media/divider.svg" width="100%" alt="">
+
+**Animated terminals for KDE Plasma (Wayland).** Terminal windows fall, bounce, slingshot, glitch or fade into place instead of just appearing, and one hotkey summons a drop-down terminal with the same animations.
+
+<img src="media/divider.svg" width="100%" alt="">
 
 ## Animations
 
@@ -22,12 +43,16 @@ Animated terminals for KDE Plasma (Wayland). Terminal windows fall, bounce, slin
 
 Each trigger has its own animation: **new terminal windows** (any app in `terminalClasses`, so launching Ghostty from a dock plays it) and the **hotkey terminal** (F12). Either can use the monitor your cursor is on, so clicking a dock icon on a screen makes the window arrive on that screen, or a fixed monitor.
 
+<img src="media/divider.svg" width="100%" alt="">
+
 ## Requirements
 
 - KDE Plasma 6 on Wayland (tested on Plasma 6.8, KWin 6.8)
 - [Ghostty](https://ghostty.org) for the hotkey terminal. New-window animations work for any terminal listed in `terminalClasses`.
 - `kwriteconfig6`, `kreadconfig6`, `qdbus6` (shipped with Plasma), Python 3
 - For the settings window: PyGObject, GTK 4 and libadwaita (`python-gobject`, `gtk4`, `libadwaita` on Arch)
+
+<img src="media/divider.svg" width="100%" alt="">
 
 ## Install
 
@@ -62,6 +87,8 @@ termanim setup
 
 Press **F12**. `./uninstall.sh` removes everything.
 
+<img src="media/divider.svg" width="100%" alt="">
+
 ## Settings window
 
 Open **Terminal Animations** from your app menu, or run `termanim-settings`. Changes apply as you make them, and **Play animation** previews the hotkey terminal.
@@ -71,6 +98,8 @@ Open **Terminal Animations** from your app menu, or run `termanim-settings`. Cha
 The whole window, scrolled top to bottom.
 
 It covers the animation and monitor for the hotkey terminal and for new windows, the hotkey, which window classes animate, the pool for random, size and position, and the tuning for each animation.
+
+<img src="media/divider.svg" width="100%" alt="">
 
 ## Command line
 
@@ -91,9 +120,13 @@ termanim test                           # play the hotkey animation
 
 Other settings cover the hotkey, resting size and position, gravity strength and bounciness, spring stiffness, glitch length, and which window classes animate.
 
+<img src="media/divider.svg" width="100%" alt="">
+
 ## How it works
 
 A KWin script moves the window frame by frame (about 8 ms per tick) using Plasma's scripting API. New terminal windows are made fully transparent the moment they open and revealed once the animation starts, so they never show up at their default spot first. The hotkey terminal is a Ghostty window kept running in the background by a systemd user service, minimized until you press the hotkey. If it closes, systemd restarts it and the script keeps the replacement hidden.
+
+<img src="media/divider.svg" width="100%" alt="">
 
 ## Limitations
 
@@ -101,6 +134,8 @@ A KWin script moves the window frame by frame (about 8 ms per tick) using Plasma
 - Animation is script-driven, so it is not GPU-smooth like KWin's built-in effects, and the glitch effect only moves and flickers the window (no tearing or slicing).
 - A new window waits about 0.3 s before animating, because KWin ignores moves while a window is still opening.
 - KWin keeps compiled scripts for the whole session. `termanim reload` loads the script from a copy named after a hash of its code, so an edit or an update takes effect immediately. Changing settings does not need a reload at all.
+
+<img src="media/divider.svg" width="100%" alt="">
 
 ## License
 

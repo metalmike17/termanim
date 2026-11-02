@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 24" width="1280" height="24">
+  <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#00C8D6" stop-opacity="0"/><stop offset=".3" stop-color="#00C8D6"/><stop offset=".7" stop-color="#FF2BD6"/><stop offset="1" stop-color="#FF2BD6" stop-opacity="0"/></linearGradient>
+  <filter id="f"><feGaussianBlur stdDeviation="2"/></filter></defs>
+  <style>@keyframes m{0%{transform:translateX(-80px)}100%{transform:translateX(1360px)}}.d{animation:m 4s linear infinite}</style>
+  <rect x="0" y="11" width="1280" height="2" fill="url(#g)"/>
+  <rect x="0" y="9" width="1280" height="6" fill="url(#g)" opacity=".4" filter="url(#f)"/>
+  <rect class="d" x="0" y="9" width="60" height="6" rx="3" fill="#fff" opacity=".85" filter="url(#f)"/>
+</svg>

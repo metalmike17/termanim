@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 300" width="1280" height="300" role="img" aria-label="termanim - animated terminals for KDE Plasma">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0D0F14"/><stop offset="1" stop-color="#07080C"/></linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff"/></linearGradient>
+    <mask id="gm"><rect width="1280" height="300" fill="url(#fade)"/></mask>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#00C8D6" stroke-opacity=".2"/></pattern>
+    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#000" fill-opacity=".27"/></pattern>
+    <linearGradient id="beam" x1="0" x2="1"><stop offset="0" stop-color="#00C8D6" stop-opacity="0"/><stop offset=".5" stop-color="#00C8D6"/><stop offset="1" stop-color="#FF2BD6" stop-opacity="0"/></linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glow2" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <style>
+    .m{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,"DejaVu Sans Mono",monospace}
+    @keyframes sweep{0%{transform:translateY(-20px);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(320px);opacity:0}}
+    @keyframes gl1{0%,84%,100%{transform:translate(0,0)}86%{transform:translate(-7px,2px)}88%{transform:translate(6px,-2px)}90%{transform:translate(-4px,0)}92%{transform:translate(0,0)}}
+    @keyframes gl2{0%,84%,100%{transform:translate(0,0)}86%{transform:translate(7px,-2px)}88%{transform:translate(-6px,2px)}90%{transform:translate(4px,0)}92%{transform:translate(0,0)}}
+    @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+    @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+    @keyframes spinr{from{transform:rotate(0)}to{transform:rotate(-360deg)}}
+    @keyframes drift{from{transform:translateY(0)}to{transform:translateY(40px)}}
+    @keyframes rec{0%,60%{opacity:1}61%,100%{opacity:.15}}
+    .sweep{animation:sweep 5s linear infinite}.gl1{animation:gl1 6s infinite}.gl2{animation:gl2 6s infinite}
+    .cur{animation:blink 1s steps(1) infinite}.drift{animation:drift 4s linear infinite}.rec{animation:rec 1.6s linear infinite}
+    .r1{transform-origin:150px 150px;animation:spin 14s linear infinite}
+    .r2{transform-origin:150px 150px;animation:spinr 9s linear infinite}
+    @keyframes fall{0%{transform:translateY(-190px)}22%{transform:translateY(0)}34%{transform:translateY(-46px)}46%{transform:translateY(0)}54%{transform:translateY(-14px)}62%{transform:translateY(0)}100%{transform:translateY(0)}}
+    .fall{animation:fall 4s cubic-bezier(.45,0,.7,1) infinite}
+    @keyframes shadow{0%{opacity:0}22%{opacity:.5}34%{opacity:.2}46%{opacity:.5}100%{opacity:.5}}
+    .shd{animation:shadow 4s linear infinite}
+    @keyframes p0{0%,0%{opacity:0}0.01%,10%{opacity:1}10.01%,100%{opacity:0}}
+    .p0{animation:p0 10s linear infinite}
+    @keyframes p1{0%,10%{opacity:0}10.01%,20%{opacity:1}20.01%,100%{opacity:0}}
+    .p1{animation:p1 10s linear infinite}
+    @keyframes p2{0%,20%{opacity:0}20.01%,30%{opacity:1}30.01%,100%{opacity:0}}
+    .p2{animation:p2 10s linear infinite}
+    @keyframes p3{0%,30%{opacity:0}30.01%,40%{opacity:1}40.01%,100%{opacity:0}}
+    .p3{animation:p3 10s linear infinite}
+    @keyframes p4{0%,40%{opacity:0}40.01%,50%{opacity:1}50.01%,100%{opacity:0}}
+    .p4{animation:p4 10s linear infinite}
+    @keyframes p5{0%,50%{opacity:0}50.01%,60%{opacity:1}60.01%,100%{opacity:0}}
+    .p5{animation:p5 10s linear infinite}
+    @keyframes p6{0%,60%{opacity:0}60.01%,70%{opacity:1}70.01%,100%{opacity:0}}
+    .p6{animation:p6 10s linear infinite}
+    @keyframes p7{0%,70%{opacity:0}70.01%,80%{opacity:1}80.01%,100%{opacity:0}}
+    .p7{animation:p7 10s linear infinite}
+    @keyframes p8{0%,80%{opacity:0}80.01%,90%{opacity:1}90.01%,100%{opacity:0}}
+    .p8{animation:p8 10s linear infinite}
+    @keyframes p9{0%,90%{opacity:0}90.01%,100%{opacity:1}100.01%,100%{opacity:0}}
+    .p9{animation:p9 10s linear infinite}
+  </style>
+  <rect width="1280" height="300" fill="url(#bg)"/>
+  <g mask="url(#gm)"><rect class="drift" y="-40" width="1280" height="380" fill="url(#grid)"/></g>
+  <circle cx="150" cy="150" r="170" fill="#00C8D6" fill-opacity=".07"/>
+  <circle cx="1120" cy="220" r="190" fill="#FF2BD6" fill-opacity=".06"/>
+  <ellipse class="shd" cx="150" cy="232" rx="60" ry="7" fill="#00C8D6" fill-opacity=".5" filter="url(#glow2)"/>
+  <g class="fall" filter="url(#glow)">
+    <rect x="96" y="96" width="108" height="124" rx="8" fill="#0A0C10" stroke="#00C8D6" stroke-width="4"/>
+    <line x1="96" y1="122" x2="204" y2="122" stroke="#00C8D6" stroke-width="3"/>
+    <circle cx="112" cy="109" r="4.5" fill="#FF2BD6"/><circle cx="127" cy="109" r="4.5" fill="#00C8D6"/><circle cx="142" cy="109" r="4.5" fill="#F2F4F8" fill-opacity=".6"/>
+    <path d="M114 148l16 12-16 12" fill="none" stroke="#FF2BD6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="140" y1="176" x2="176" y2="176" stroke="#00C8D6" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g class="m">
+    <rect x="1050" y="40" width="204" height="214" rx="6" fill="#0A0C10" fill-opacity=".85" stroke="#00C8D6" stroke-opacity=".5"/>
+    <text x="1066" y="62" font-size="12" letter-spacing="2" fill="#FF2BD6">ANIMATION</text>
+    <line x1="1050" y1="72" x2="1254" y2="72" stroke="#00C8D6" stroke-opacity=".3"/>
+    <text x="1068" y="92" font-size="13" fill="#A9B4C2" fill-opacity=".55">  gravity</text>
+    <g class="p0"><rect x="1056" y="80" width="192" height="16" fill="#00C8D6" fill-opacity=".16"/><text x="1062" y="92" font-size="13" fill="#FF2BD6">&gt;</text><text x="1068" y="92" font-size="13" fill="#F2F4F8">  gravity</text></g>
+    <text x="1068" y="108" font-size="13" fill="#A9B4C2" fill-opacity=".55">  paddle</text>
+    <g class="p1"><rect x="1056" y="96" width="192" height="16" fill="#00C8D6" fill-opacity=".16"/><text x="1062" y="108" font-size="13" fill="#FF2BD6">&gt;</text><text x="1068" y="108" font-size="13" fill="#F2F4F8">  paddle</text></g>
+    <text x="1068" y="124" font-size="13" fill="#A9B4C2" fill-opacity=".55">  slingshot</text>
+    <g class="p2"><rect x="1056" y="112" width="192" height="16" fill="#00C8D6" fill-opacity=".16"/><text x="1062" y="124" font-size="13" fill="#FF2BD6">&gt;</text><text x="1068" y="124" font-size="13" fill="#F2F4F8">  slingshot</text></g>
+    <text x="1068" y="140" font-size="13" fill="#A9B4C2" fill-opacity=".55">  glitch</text>
+    <g class="p3"><rect x="1056" y="128" width="192" height="16" fill="#00C8D6" fill-opacity=".16"/><text x="1062" y="140" font-size="13" fill="#FF2BD6">&gt;</text><text x="1068" y="140" font-size="13" fill="#F2F4F8">  glitch</text></g>
+    <text x="1068" y="156" font-size="13" fill="#A9B4C2" fill-opacity=".55">  fade</text>
+    <g class="p4"><rect x="1056" y="144" width="192" height="16" fill="#00C8D6" fill-opacity=".16"/><text x="1062" y="156" font-size="13" fill="#FF2BD6">&gt;</text><text x="1068" y="156" font-size="13" fill="#F2F4F8">  fade</text></g>
+    <text x="1068" y="172" font-size="13" fill="#A9B4C2" fill-opacity=".55">  slide</text>
+    <g class="p5"><rect x="1056" y="160" width="192" height="16" fill="#00C8D6" fill-opacity=".16"/><text x="1062" y="172" font-size="13" fill="#FF2BD6">&gt;</text><text x="1068" y="172" font-size="13" fill="#F2F4F8">  slide</text></g>
+    <text x="1068" y="188" font-size="13" fill="#A9B4C2" fill-opacity=".55">  shake</text>
+    <g class="p6"><rect x="1056" y="176" width="192" height="16" fill="#00C8D6" fill-opacity=".16"/><text x="1062" y="188" font-size="13" fill="#FF2BD6">&gt;</text><text x="1068" y="188" font-size="13" fill="#F2F4F8">  shake</text></g>
+    <text x="1068" y="204" font-size="13" fill="#A9B4C2" fill-opacity=".55">  pendulum</text>
+    <g class="p7"><rect x="1056" y="192" width="192" height="16" fill="#00C8D6" fill-opacity=".16"/><text x="1062" y="204" font-size="13" fill="#FF2BD6">&gt;</text><text x="1068" y="204" font-size="13" fill="#F2F4F8">  pendulum</text></g>
+    <text x="1068" y="220" font-size="13" fill="#A9B4C2" fill-opacity=".55">  orbit</text>
+    <g class="p8"><rect x="1056" y="208" width="192" height="16" fill="#00C8D6" fill-opacity=".16"/><text x="1062" y="220" font-size="13" fill="#FF2BD6">&gt;</text><text x="1068" y="220" font-size="13" fill="#F2F4F8">  orbit</text></g>
+    <text x="1068" y="236" font-size="13" fill="#A9B4C2" fill-opacity=".55">  yoyo</text>
+    <g class="p9"><rect x="1056" y="224" width="192" height="16" fill="#00C8D6" fill-opacity=".16"/><text x="1062" y="236" font-size="13" fill="#FF2BD6">&gt;</text><text x="1068" y="236" font-size="13" fill="#F2F4F8">  yoyo</text></g>
+  </g>
+  <g class="m" font-size="92" font-weight="800" letter-spacing="8">
+    <text class="gl1" x="290" y="168" fill="#00C8D6" fill-opacity=".85">TERMANIM</text>
+    <text class="gl2" x="290" y="168" fill="#FF2BD6" fill-opacity=".85">TERMANIM</text>
+    <text x="290" y="168" fill="#F2F4F8" filter="url(#glow2)">TERMANIM</text>
+  </g>
+  <rect x="292" y="192" width="700" height="3" fill="url(#beam)"/>
+  <text class="m" x="292" y="238" font-size="22" letter-spacing="3" fill="#FF2BD6"><tspan fill="#00C8D6">&gt;</tspan> ANIMATED TERMINALS FOR KDE PLASMA<tspan class="cur">_</tspan></text>
+  <g fill="none" stroke="#FF2BD6" stroke-width="3" stroke-linecap="square" stroke-opacity=".9" filter="url(#glow2)">
+    <path d="M16 46V16H46"/><path d="M1234 16H1264V46"/><path d="M16 254V284H46"/><path d="M1264 254V284H1234"/>
+  </g>
+  <g class="m" font-size="12" letter-spacing="2">
+    <circle class="rec" cx="38" cy="38" r="4.5" fill="#00C8D6"/><text x="50" y="42" fill="#00C8D6">LIVE</text>
+    <text x="1230" y="278" text-anchor="end" fill="#FF2BD6" fill-opacity=".85">KWIN · WAYLAND · F12</text>
+  </g>
+  <rect width="1280" height="300" fill="url(#scan)"/>
+  <rect class="sweep" width="1280" height="3" fill="#FF2BD6" fill-opacity=".55" filter="url(#glow2)"/>
+  <rect x="1" y="1" width="1278" height="298" fill="none" stroke="#FF2BD6" stroke-opacity=".35"/>
+</svg>
